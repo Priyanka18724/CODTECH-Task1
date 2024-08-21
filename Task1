@@ -1,0 +1,33 @@
+# CODTECH-Task1
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_iris
+iris = load_iris()
+data = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+data['species'] = iris.target
+data['species'] = data['species'].map({0: 'setosa', 1: 'versicolor', 2: 'virginica'})
+print(data.head())
+print(data.info())
+print(data.describe(include='all'))
+print(data.isnull().sum())
+print(data.duplicated().sum())
+print(data.describe())
+print(data['species'].value_counts())
+features = iris.feature_names
+plt.figure(figsize=(12, 8))
+for i, feature in enumerate(features):
+    plt.subplot(2, 2, i + 1)
+    sns.histplot(data[feature], bins=30, kde=True, color='blue')
+    plt.title(f'Distribution of {feature}')
+plt.tight_layout()
+plt.show()
+plt.figure(figsize=(12, 8))
+sns.pairplot(data, hue='species', markers=['o', 's', 'D'])
+plt.suptitle('Pairwise Scatter Plots of Iris Dataset', y=1.02)
+plt.show()
+correlation_matrix = data[features].corr()
+plt.figure(figsize=(8, 6))
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f', vmin=-1, vmax=1)
+plt.title('Correlation Matrix Heatmap')
